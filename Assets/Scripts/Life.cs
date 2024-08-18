@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class Life : MonoBehaviour
@@ -58,11 +59,9 @@ public class Life : MonoBehaviour
 
     public void DecreaseLife() {
         life--;
-        if (life < 0) {
-            Debug.Log("GameOver");
-            //SceneManager.LoadScene("GameOver");
-        } else {
-            this.SetHealthSprite();
+        this.SetHealthSprite();
+        if (life <= 0) {
+            SceneManager.LoadScene("GameOver");
         }
     }
 }

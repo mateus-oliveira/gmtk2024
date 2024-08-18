@@ -54,7 +54,6 @@ public class Score : MonoBehaviour
     {
         this.points += points;
         scoreText.text = "Score: " + this.points;
-        Debug.Log("Pontos: " + this.points);
     }
 
     public void ResetPoints()
