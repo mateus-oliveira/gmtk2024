@@ -4,16 +4,20 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private List<GameObject> prefabs;
-    [SerializeField] private int spawnInterval;
+    [SerializeField] private float initialSpawnInterval = 2f;
+    [SerializeField] private float minSpawnInterval = 0.8f;
+    [SerializeField] private float spawnAcceleration = 0.05f;
+
+    private float currentSpawnInterval;
 
     private void Start()
     {
         Score.Instance.ResetPoints();
-        InvokeRepeating("SpawnObject", 0f, spawnInterval);
+        currentSpawnInterval = initialSpawnInterval;
+        Invoke("SpawnObject", currentSpawnInterval);
     }
 
-    private void SpawnObject()
-    {
+    private void SpawnObject() {
         int randomIndex = Random.Range(0, 3);
 
         GameObject prefab = prefabs[randomIndex];
@@ -43,6 +47,10 @@ public class Spawner : MonoBehaviour
                 movementController.SetSpeed(5f); // Blue - Slowest
                 break;
         }
+
+        currentSpawnInterval = Mathf.Max(minSpawnInterval, currentSpawnInterval - spawnAcceleration);
+
+        Invoke("SpawnObject", currentSpawnInterval);
     }
 }
 
