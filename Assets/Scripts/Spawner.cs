@@ -8,18 +8,19 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
+        Score.Instance.ResetPoints();
         InvokeRepeating("SpawnObject", 0f, spawnInterval);
     }
 
     private void SpawnObject()
     {
-        // Randomize color and size
         int randomIndex = Random.Range(0, 3);
 
         GameObject prefab = prefabs[randomIndex];
         GameObject spawnedObject = Instantiate(prefab, transform.position, Quaternion.identity);
 
         SpriteRenderer spriteRenderer = spawnedObject.GetComponent<SpriteRenderer>();
+        MovementController movementController = spawnedObject.AddComponent<MovementController>();
 
         switch (randomIndex)
         {
@@ -27,17 +28,34 @@ public class Spawner : MonoBehaviour
                 // Red - Small
                 spriteRenderer.color = Color.red;
                 spawnedObject.transform.localScale = Vector3.one;
+                movementController.SetSpeed(7f); // Red - Fastest
                 break;
             case 1:
                 // Yellow - Medium
                 spriteRenderer.color = Color.yellow;
                 spawnedObject.transform.localScale = Vector3.one * 1.5f;
+                movementController.SetSpeed(6f); // Yellow - Medium speed
                 break;
             case 2:
                 // Blue - Large
                 spriteRenderer.color = Color.blue;
                 spawnedObject.transform.localScale = Vector3.one * 2f;
+                movementController.SetSpeed(5f); // Blue - Slowest
                 break;
         }
+    }
+}
+
+public class MovementController : MonoBehaviour
+{
+    private float speed;
+
+    private void Update()
+    {
+        transform.Translate(Vector3.down * speed * Time.deltaTime);
+    }
+
+    public void SetSpeed(float speed) {
+        this.speed = speed;
     }
 }

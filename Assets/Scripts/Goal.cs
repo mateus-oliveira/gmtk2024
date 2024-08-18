@@ -62,4 +62,16 @@ public class CircleController : MonoBehaviour
                 break;
         }
     }
+
+
+    public void OnTriggerEnter2D(Collider2D other) {
+        if (other.CompareTag(colors[currentScaleIndex])) {
+            Debug.Log("SumPoints");
+            Destroy(other.gameObject);
+            Score.Instance.AddPoints(1);
+        } else {
+            Debug.Log("LostLife");
+            Life.Instance.DecreaseLife();
+        }
+    }
 }
